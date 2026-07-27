@@ -1,5 +1,5 @@
 install:
-    pip install --upgrade pip &&\
+    pip install --upgrade pip
     pip install -r requirements.txt
 
 format:
@@ -10,10 +10,8 @@ train:
 
 eval:
     echo "## Model Metrics" > report.md
-    cat ./Results/metrics.txt >> report.md
-
-	
-    echo '\n## Confusion Matrix Plot' >> report.md
-    echo '![Confusion Matrix](./Results/model_results.png)' >> report.md
-
+    cat Results/metrics.txt >> report.md
+    echo "" >> report.md
+    echo "## Confusion Matrix Plot" >> report.md
+    echo "![Confusion Matrix](Results/model_results.png)" >> report.md
     cml comment create report.md
