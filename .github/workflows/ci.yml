@@ -29,14 +29,11 @@ jobs:
 
     - name: Evaluate Model
       run: |
-        # Humne 'cml' tool ko hata diya hai taake koi error na aaye
         echo "## Model Metrics" > report.md
         cat Results/metrics.txt >> report.md
         echo "" >> report.md
         echo "## Confusion Matrix Plot" >> report.md
         echo "![Confusion Matrix](Results/model_results.png)" >> report.md
-        
-        # Yeh line aapki report ko seedha GitHub screen par print kar degi
         cat report.md >> $GITHUB_STEP_SUMMARY
 
     - name: Update Branch
@@ -52,5 +49,5 @@ jobs:
       run: |
         git config --global user.name "CI Bot"
         git config --global user.email "bot@example.com"
-        git remote add hf https://huggingface.co{{ secrets.USER_NAME }}/update-branch
+        git remote add hf https://huggingface.co
         git push --force hf update:main
