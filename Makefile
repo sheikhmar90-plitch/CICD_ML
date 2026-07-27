@@ -27,16 +27,14 @@ update-branch:
 
 hf-login:
 	git pull origin update || true
-	# Pehle naye hf tool ko install karne ki command lazmi hai
 	pip install -U huggingface-hub
 	hf auth login --token $(HF)
 
 push-hub:
-	hf upload sheikhmar90-plitch/my-model-app ./App . --repo-type=space --commit-message="Sync App files"
-	hf upload sheikhmar90-plitch/my-model-app ./Model ./Model --repo-type=space --commit-message="Sync Model"
-	hf upload sheikhmar90-plitch/my-model-app ./Results ./Metrics --repo-type=space --commit-message="Sync Metrics"
+	# Hum 'hf whoami' se aapka asli username nikal kar direct usi par deploy karenge
+	@HF_USER=$$(hf whoami --json | grep -oP '"username":\s*"\K[^"]+'); \
+	hf upload $$HF_USER/my-model-app ./App . --repo-type=space --commit-message="Sync App files" && \
+	hf upload $$HF_USER/my-model-app ./Model ./Model --repo-type=space --commit-message="Sync Model" && \
+	hf upload $$HF_USER/my-model-app ./Results ./Metrics --repo-type=space --commit-message="Sync Metrics"
 
 deploy: hf-login push-hub
-
-
-
