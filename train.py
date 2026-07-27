@@ -122,9 +122,6 @@ print("Metrics and confusion matrix saved successfully!")
 
 import skops.io as sio
 
-# Save trained pipeline
 sio.dump(pipe, "Model/drug_pipeline.skops")
 
 print("Pipeline saved successfully!")
-
-sio.load("Model/drug_pipeline.skops", trusted=True)
