@@ -28,10 +28,13 @@ jobs:
       run: make train
 
     - name: Evaluate Model
-      uses: iterative/setup-cml@v3  # <-- Yahan v1 ko badal kar v3 kar diya hai taake Node error na aaye
-    - run: make eval
       env:
         REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Humne setup-cml step nikal diya hai taake crash na ho
+        # Aur direct node package ke zariye comment create kar rahe hain
+        npm install -g @dvcorg/cml
+        make eval
 
     - name: Update Branch
       env:
