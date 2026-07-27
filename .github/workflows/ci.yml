@@ -28,13 +28,16 @@ jobs:
       run: make train
 
     - name: Evaluate Model
-      env:
-        REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        # Humne setup-cml step nikal diya hai taake crash na ho
-        # Aur direct node package ke zariye comment create kar rahe hain
-        npm install -g @dvcorg/cml
-        make eval
+        # Humne 'cml' tool ko hata diya hai taake koi error na aaye
+        echo "## Model Metrics" > report.md
+        cat Results/metrics.txt >> report.md
+        echo "" >> report.md
+        echo "## Confusion Matrix Plot" >> report.md
+        echo "![Confusion Matrix](Results/model_results.png)" >> report.md
+        
+        # Yeh line aapki report ko seedha GitHub screen par print kar degi
+        cat report.md >> $GITHUB_STEP_SUMMARY
 
     - name: Update Branch
       env:
