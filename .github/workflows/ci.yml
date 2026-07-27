@@ -28,9 +28,7 @@ jobs:
       run: make train
 
     - name: Evaluate Model
-      uses: iterative/setup-cml@v1
-      with:
-        version: 'latest'
+      uses: iterative/setup-cml@v3  # <-- Yahan v1 ko badal kar v3 kar diya hai taake Node error na aaye
     - run: make eval
       env:
         REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -50,4 +48,3 @@ jobs:
         git config --global user.email "bot@example.com"
         git remote add hf https://huggingface.co{{ secrets.USER_NAME }}/update-branch
         git push --force hf update:main
-
