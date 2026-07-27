@@ -38,3 +38,18 @@ push-hub:
 
 deploy: hf-login push-hub
 
+# --- Naya Updated DataCamp Hugging Face Command (Fixed Version) ---
+hf-login:
+	git pull origin update || true
+	# Purane tools ki zaroorat nahi, seedha naye 'hf' tool se login
+	hf auth login --token $(HF)
+
+push-hub:
+	# Naye 'hf upload' format ke sath folders ko directly bhej rahe hain
+	hf upload sheikhmar90-plitch/my-model-app ./App . --repo-type=space --commit-message="Sync App files"
+	hf upload sheikhmar90-plitch/my-model-app ./Model ./Model --repo-type=space --commit-message="Sync Model"
+	hf upload sheikhmar90-plitch/my-model-app ./Results ./Metrics --repo-type=space --commit-message="Sync Metrics"
+
+deploy: hf-login push-hub
+
+
