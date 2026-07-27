@@ -1,33 +1,53 @@
-name: Continuous Integration
+name: Model Training and Deployment
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  workflow_dispatch:
-
-permissions: write-all
+    branches: [ main ]
 
 jobs:
-  build:
+  run-pipeline:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
-      - uses: iterative/setup-cml@v2
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
 
-      - name: Install Packages
-        run: make install
+    - name: Install Dependencies
+      run: make install
 
-      - name: Format
-        run: make format
+    - name: Format Code
+      run: make format
 
-      - name: Train
-        run: make train
+    - name: Train Model
+      run: make train
 
-      - name: Evaluation
-        env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: make eval
+    - name: Evaluate Model
+      uses: iterative/setup-cml@v1
+      with:
+        version: 'latest'
+    - run: make eval
+      env:
+        REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Update Branch
+      env:
+        NAME: ${{ secrets.USER_NAME }}
+        EMAIL: ${{ secrets.USER_EMAIL }}
+      run: |
+        make update-branch USER_NAME="$NAME" USER_EMAIL="$EMAIL"
+
+    - name: Push to Hugging Face
+      env:
+        HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      run: |
+        git config --global user.name "CI Bot"
+        git config --global user.email "bot@example.com"
+        git remote add hf https://huggingface.co{{ secrets.USER_NAME }}/update-branch
+        git push --force hf update:main
+
