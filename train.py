@@ -19,7 +19,6 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OrdinalEncoder, StandardScaler
 from sklearn.metrics import accuracy_score, classification_report
 
-
 # Load Dataset
 drug_df = pd.read_csv("Data/drug.csv")
 
@@ -36,10 +35,7 @@ y = drug_df["Drug"]
 
 # Train Test Split
 X_train, X_test, y_train, y_test = train_test_split(
-    X,
-    y,
-    test_size=0.3,
-    random_state=125
+    X, y, test_size=0.3, random_state=125
 )
 
 
@@ -62,10 +58,7 @@ transform = ColumnTransformer(
 pipe = Pipeline(
     steps=[
         ("preprocessing", transform),
-        ("model", RandomForestClassifier(
-            n_estimators=100,
-            random_state=125
-        )),
+        ("model", RandomForestClassifier(n_estimators=100, random_state=125)),
     ]
 )
 
@@ -86,7 +79,6 @@ print(classification_report(y_test, y_pred))
 from sklearn.metrics import f1_score, confusion_matrix, ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
 
-
 # Calculate F1 score
 f1 = f1_score(y_test, y_pred, average="weighted")
 
@@ -94,29 +86,18 @@ f1 = f1_score(y_test, y_pred, average="weighted")
 # Save metrics
 with open("Results/metrics.txt", "w") as outfile:
     outfile.write(
-        f"Accuracy = {accuracy_score(y_test, y_pred):.2f}, "
-        f"F1 Score = {f1:.2f}"
+        f"Accuracy = {accuracy_score(y_test, y_pred):.2f}, " f"F1 Score = {f1:.2f}"
     )
 
 
 # Create confusion matrix
-cm = confusion_matrix(
-    y_test,
-    y_pred,
-    labels=pipe.classes_
-)
+cm = confusion_matrix(y_test, y_pred, labels=pipe.classes_)
 
-disp = ConfusionMatrixDisplay(
-    confusion_matrix=cm,
-    display_labels=pipe.classes_
-)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=pipe.classes_)
 
 disp.plot()
 
-plt.savefig(
-    "Results/model_results.png",
-    dpi=120
-)
+plt.savefig("Results/model_results.png", dpi=120)
 
 print("Metrics and confusion matrix saved successfully!")
 
