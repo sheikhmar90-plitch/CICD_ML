@@ -29,4 +29,4 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          huggingface-cli upload systembae/my-model-app . . --repo-type=space --commit-message="Deploy updated app and models"
+          hf upload systembae/my-model-app . . --repo-type=space --commit-message="Deploy updated app and models"
