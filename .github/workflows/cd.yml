@@ -29,4 +29,8 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          hf upload systembae/my-model-app . . --repo-type=space --commit-message="Deploy updated app and models"
+          # Static SDK ke sath repo create hogi taake aapka Gradio-lite sahi chale
+          huggingface-cli repo create my-model-app --repo-type space --space-sdk static || true
+          
+          # Ab saari files ko space par push karenge
+          hf upload systembae/my-model-app . . --repo-type=space --commit-message="Deploy updated gradio-lite app"
