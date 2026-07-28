@@ -27,14 +27,12 @@ update-branch:
 
 hf-login:
 	git pull origin update || true
-	pip install -U huggingface-hub
-	hf auth login --token $(HF)
+	pip install -U huggingface_hub
+	huggingface-cli login --token $(HF) --add-to-git-credential
 
 push-hub:
-	# Hum 'hf whoami' se aapka asli username nikal kar direct usi par deploy karenge
-	@HF_USER=$$(hf whoami --json | grep -oP '"username":\s*"\K[^"]+'); \
-	hf upload $$HF_USER/my-model-app ./App . --repo-type=space --commit-message="Sync App files" && \
-	hf upload $$HF_USER/my-model-app ./Model ./Model --repo-type=space --commit-message="Sync Model" && \
-	hf upload $$HF_USER/my-model-app ./Results ./Metrics --repo-type=space --commit-message="Sync Metrics"
+	huggingface-cli upload systembae/my-model-app ./App . --repo-type=space --commit-message="Sync App files"
+	huggingface-cli upload systembae/my-model-app ./Model ./Model --repo-type=space --commit-message="Sync Model"
+	huggingface-cli upload systembae/my-model-app ./Results ./Metrics --repo-type=space --commit-message="Sync Metrics"
 
 deploy: hf-login push-hub
