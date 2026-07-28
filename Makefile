@@ -22,17 +22,7 @@ USER_EMAIL ?= "bot@example.com"
 update-branch:
 	git config --global user.name "$(USER_NAME)"
 	git config --global user.email "$(USER_EMAIL)"
-	git commit -am "Update with new results"
+	git add .
+	git commit -m "Update with new results" || true
 	git push --force origin HEAD:update
 
-hf-login:
-	git pull origin update || true
-	pip install -U huggingface_hub
-	huggingface-cli login --token $(HF) --add-to-git-credential
-
-push-hub:
-	huggingface-cli upload systembae/my-model-app ./App . --repo-type=space --commit-message="Sync App files"
-	huggingface-cli upload systembae/my-model-app ./Model ./Model --repo-type=space --commit-message="Sync Model"
-	huggingface-cli upload systembae/my-model-app ./Results ./Metrics --repo-type=space --commit-message="Sync Metrics"
-
-deploy: hf-login push-hub
