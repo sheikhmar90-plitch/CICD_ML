@@ -40,8 +40,3 @@ jobs:
         NAME: ${{ secrets.USER_NAME }}
         EMAIL: ${{ secrets.USER_EMAIL }}
       run: make update-branch USER_NAME="$NAME" USER_EMAIL="$EMAIL"
-
-    - name: Deploy to Hugging Face
-      env:
-        HF: ${{ secrets.HF_TOKEN }}
-      run: make deploy
