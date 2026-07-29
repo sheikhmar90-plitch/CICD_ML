@@ -27,13 +27,13 @@ update-branch:
 
 hf-login:
 	git pull origin update || true
-	git switch update || true
-	pip install -U "huggingface_hub[cli]"
-	huggingface-cli login --token $(HF) --add-to-git-credential
+	# Naye hf tool se direct login bina kisi error ke
+	hf auth login --token $(HF)
 
 push-hub:
-	huggingface-cli upload sheikhmar90-plitch/my-model-app ./App . --repo-type=space --commit-message="Sync App files" || huggingface-cli upload sheikhmar90/my-model-app ./App . --repo-type=space --commit-message="Sync App files"
-	huggingface-cli upload sheikhmar90-plitch/my-model-app ./Model /Model --repo-type=space --commit-message="Sync Model" || huggingface-cli upload sheikhmar90/my-model-app ./Model /Model --repo-type=space --commit-message="Sync Model"
-	huggingface-cli upload sheikhmar90-plitch/my-model-app ./Results /Metrics --repo-type=space --commit-message="Sync Metrics" || huggingface-cli upload sheikhmar90/my-model-app ./Results /Metrics --repo-type=space --commit-message="Sync Metrics"
+	# Naye hf upload format ke sath folders ko direct Hugging Face par bhej rahe hain
+	hf upload sheikhmar90-plitch/my-model-app ./App . --repo-type=space --commit-message="Sync App files" || hf upload sheikhmar90/my-model-app ./App . --repo-type=space --commit-message="Sync App files"
+	hf upload sheikhmar90-plitch/my-model-app ./Model ./Model --repo-type=space --commit-message="Sync Model" || hf upload sheikhmar90/my-model-app ./Model ./Model --repo-type=space --commit-message="Sync Model"
+	hf upload sheikhmar90-plitch/my-model-app ./Results ./Metrics --repo-type=space --commit-message="Sync Metrics" || hf upload sheikhmar90/my-model-app ./Results ./Metrics --repo-type=space --commit-message="Sync Metrics"
 
 deploy: hf-login push-hub
