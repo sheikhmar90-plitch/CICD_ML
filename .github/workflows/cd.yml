@@ -28,10 +28,9 @@ jobs:
           HF: ${{ secrets.HF_TOKEN }}
         run: |
           git pull origin update || true
-          
-          # Direct hf commands bina kisi Makefile dependencies ke
           hf auth login --token $HF
           
-          hf upload sheikhmar90-plitch/my-model-app ./App . --repo-type=space --commit-message="Sync App files" || hf upload sheikhmar90/my-model-app ./App . --repo-type=space --commit-message="Sync App files"
-          hf upload sheikhmar90-plitch/my-model-app ./Model ./Model --repo-type=space --commit-message="Sync Model" || hf upload sheikhmar90/my-model-app ./Model ./Model --repo-type=space --commit-message="Sync Model"
-          hf upload sheikhmar90-plitch/my-model-app ./Results ./Metrics --repo-type=space --commit-message="Sync Metrics" || hf upload sheikhmar90/my-model-app ./Results ./Metrics --repo-type=space --commit-message="Sync Metrics"
+          # Humne namespace ka jhanjhat khatam karke direct repo-id 'my-model-app' set kar di hai
+          hf upload my-model-app ./App . --repo-type=space --commit-message="Sync App files"
+          hf upload my-model-app ./Model ./Model --repo-type=space --commit-message="Sync Model"
+          hf upload my-model-app ./Results ./Metrics --repo-type=space --commit-message="Sync Metrics"
