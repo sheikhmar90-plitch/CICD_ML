@@ -10,7 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Humne condition wali line bilkul saaf kar di hai taake skip na ho
     steps:
       - uses: actions/checkout@v4
 
@@ -19,7 +18,20 @@ jobs:
         with:
           python-version: '3.10'
 
+      - name: Install Hugging Face Tool
+        run: |
+          pip install --upgrade pip
+          pip install huggingface-hub
+
       - name: Deployment To Hugging Face
         env:
           HF: ${{ secrets.HF_TOKEN }}
-        run: make deploy HF=$HF
+        run: |
+          git pull origin update || true
+          
+          # Direct hf commands bina kisi Makefile dependencies ke
+          hf auth login --token $HF
+          
+          hf upload sheikhmar90-plitch/my-model-app ./App . --repo-type=space --commit-message="Sync App files" || hf upload sheikhmar90/my-model-app ./App . --repo-type=space --commit-message="Sync App files"
+          hf upload sheikhmar90-plitch/my-model-app ./Model ./Model --repo-type=space --commit-message="Sync Model" || hf upload sheikhmar90/my-model-app ./Model ./Model --repo-type=space --commit-message="Sync Model"
+          hf upload sheikhmar90-plitch/my-model-app ./Results ./Metrics --repo-type=space --commit-message="Sync Metrics" || hf upload sheikhmar90/my-model-app ./Results ./Metrics --repo-type=space --commit-message="Sync Metrics"
