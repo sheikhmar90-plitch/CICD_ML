@@ -17,8 +17,11 @@ jobs:
       with:
         python-version: '3.10'
 
-    - name: Install Dependencies
-      run: make install
+    - name: Install Tools
+      run: |
+        pip install --upgrade pip
+        # Yahan hum black aur baqi tools server par install kar rahe hain taake error na aaye
+        pip install black skops pandas numpy scikit-learn matplotlib joblib
 
     - name: Format Code
       run: make format
@@ -39,4 +42,5 @@ jobs:
       env:
         NAME: ${{ secrets.USER_NAME }}
         EMAIL: ${{ secrets.USER_EMAIL }}
-      run: make update-branch USER_NAME="$NAME" USER_EMAIL="$EMAIL"
+      run: |
+        make update-branch USER_NAME="$NAME" USER_EMAIL="$EMAIL"
