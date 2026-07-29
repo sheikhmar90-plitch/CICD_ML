@@ -10,24 +10,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    # Humne condition wali line bilkul saaf kar di hai taake skip na ho
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: update
-          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: Install Hugging Face Hub
-        run: pip install -U huggingface_hub
-
       - name: Deployment To Hugging Face
         env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: |
-          # Space pehle se bana hua hai, isliye sirf direct files upload karenge
-          hf upload Syestembae/my-model-app . . --repo-type=space --commit-message="Deploy updated gradio-lite app"
+          HF: ${{ secrets.HF_TOKEN }}
+        run: make deploy HF=$HF
